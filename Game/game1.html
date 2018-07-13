@@ -66,18 +66,28 @@ function drawSpikes() {
 
 document.addEventListener("keydown", move);
 
+var countBack =false;
 function move (e) {
 	let keyCode = e.keyCode;
 	if (keyCode == 32) { //Spacebar
+		if ((spikes.currFalling ==  spikes.numbOfSpikes() && !countBack)|| (spikes.currFalling == 0 && countBack)) {
+			countBack = !countBack;
+			//spikes.currFalling = 0; //Just start at beginniing again
+		}  
+		if (countBack) {
+			spikes.currFalling--;
+		}
 		arrSpikes[spikes.currFalling].spikeFall();
-		spikes.currFalling++;
+		if (!countBack) {
+			spikes.currFalling++;
+		}
 	}
 }
 
 function draw() {
+	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
 	drawSpikes();
-
-	//window.requestAnimationFrame(draw);
+	requestAnimationFrame(draw);
 }
 
 draw();
