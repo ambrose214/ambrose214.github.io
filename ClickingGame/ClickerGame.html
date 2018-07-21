@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="ClickerGame.css">
+<body>
+	<div id= 'div1'>
+		<p id="p1"> </p>
+
+	</div>
+</body>
+
+<canvas> </canvas>
+
+<script> 
+	//Current issue with code: code looks ugly with everything only referencing the rects object created rather than a general one
+	var cx = document.querySelector("canvas").getContext("2d");
+	cx.canvas.width=window.innerWidth;
+	cx.canvas.height=window.innerHeight;
+
+	var rectW = 20;
+	var rectH = 20;
+
+	class Rectangles {
+		constructor () {
+			this.arr = [];
+		}
+		addRectangle (newRect) {
+			this.arr.push(newRect);
+		}
+		spawnRectangles() {
+			for (let i = 0; i < this.arr.length; i++) {
+				cx.fillRect(this.arr[i].posX, this.arr[i].posY, this.arr[i].width,
+					this.arr[i].height);
+			}
+		}
+		
+		naturalMovement() {
+			for (let i = 0; i < this.arr.length; i++) {
+				this.arr[i].gravity(this.arr);
+			}
+		}
+	}
+
+	class Rectangle {
+		constructor (posX, posY, width, height) {
+			this.posX = posX;
+			this.posY = posY;
+			this.width = width;
+			this.height = height;
+		}
+
+		equals (other) {
+			return (this.posX == other.posX && this.posY == other.posY &&
+					this.width == other.width && this.height == other.height);
+		}
+
+		//countsItself is for if you want the collission to count for itself
+		collides(countsItself) { //Have to account for clicking outside the area but still builds into it
+			for (let i = 0; i < rects.arr.length; i++) {
+				if ((this.posX >= rects.arr[i].posX-(rects.arr[i].width)) && 
+					(this.posX <= (rects.arr[i].posX+(rects.arr[i].width))) &&
+					(this.posY >= rects.arr[i].posY-(rects.arr[i].height)) && 
+					(this.posY <= (rects.arr[i].posY+(rects.arr[i].height))) &&
+					(countsItself || (!countsItself && !this.equals(rects.arr[i])))) {
+					return true;
+				}
+			}
+			return false;
+		}
+		gravity () {
+			console.log( !this.collides(false));
+			if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height-this.height)) {
+				this.posY += 2;
+			}
+			/*if ((!this.collides(otherBoxes)) && this.posY < cx.canvas.height-this.height) {
+				this.posY += 2;
+				var myReq =  window.requestAnimationFrame(this.gravity(otherBoxes).bind(this));
+			}
+			else {
+				cancelAnimationFrame(myReq);
+			} */
+		}
+	}
+
+	document.addEventListener('click', (e) => {
+		let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
+		console.log(e.clientX + " " + e.clientY);
+		console.log(newRect.collides(true));
+		if (!newRect.collides(true)) {
+			rects.addRectangle(newRect);
+		}
+	});
+
+	function draw() {
+		cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
+		rects.naturalMovement();
+		rects.spawnRectangles();
+		requestAnimationFrame(draw);
+	}
+
+	var rects = new Rectangles(); 
+	draw();
+</script>
+
