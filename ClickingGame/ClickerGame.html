@@ -2,8 +2,8 @@
 <link rel="stylesheet" href="ClickerGame.css">
 <body>
 	<div id= 'div1'>
-		<p id="p1"> </p>
-
+		<p id="p1"> a</p>
+		<h1 id="counter"> 0 </h1>
 	</div>
 </body>
 
@@ -37,6 +37,13 @@
 				this.arr[i].gravity(this.arr);
 			}
 		}
+		remove(other) {
+			for (let i = 0; i < this.arr.length; i++) {
+				if (this.arr[i].equals(other)) {
+					this.arr.splice(i, 1);
+				}
+			}
+		}
 	}
 
 	class Rectangle {
@@ -49,7 +56,7 @@
 
 		equals (other) {
 			return (this.posX == other.posX && this.posY == other.posY &&
-					this.width == other.width && this.height == other.height);
+				this.width == other.width && this.height == other.height);
 		}
 
 		//countsItself is for if you want the collission to count for itself
@@ -59,17 +66,20 @@
 					(this.posX <= (rects.arr[i].posX+(rects.arr[i].width))) &&
 					(this.posY >= rects.arr[i].posY-(rects.arr[i].height)) && 
 					(this.posY <= (rects.arr[i].posY+(rects.arr[i].height))) &&
-					(countsItself || (!countsItself && !this.equals(rects.arr[i])))) {
-					return true;
-				}
+					(countsItself || (!countsItself && !this.equals(rects.arr[i])))
+					) {
+					console.log("a");
+				return true;
 			}
-			return false;
 		}
-		gravity () {
-			console.log( !this.collides(false));
-			if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height-this.height)) {
-				this.posY += 2;
-			}
+		return false;
+	}
+
+	gravity () {
+		//console.log( !this.collides(false));
+		if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height-this.height)) {
+			this.posY += 2;
+		}
 			/*if ((!this.collides(otherBoxes)) && this.posY < cx.canvas.height-this.height) {
 				this.posY += 2;
 				var myReq =  window.requestAnimationFrame(this.gravity(otherBoxes).bind(this));
@@ -80,23 +90,77 @@
 		}
 	}
 
-	document.addEventListener('click', (e) => {
-		let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
-		console.log(e.clientX + " " + e.clientY);
-		console.log(newRect.collides(true));
-		if (!newRect.collides(true)) {
-			rects.addRectangle(newRect);
+	class Monster extends Rectangle {
+		constructor (posX, posY, width, height) {
+			super(posX, posY, width, height);
 		}
-	});
-
-	function draw() {
-		cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
-		rects.naturalMovement();
-		rects.spawnRectangles();
-		requestAnimationFrame(draw);
+		move () {
+			if ((this.posX <= 0 && dirAdd == -speed) ||
+				(this.posX >= cx.canvas.width && dirAdd == speed))  {
+				dirAdd = -dirAdd;
+		}
+		this.posX += dirAdd;
 	}
+	drawMonster() {
+		if (this.collides(rects) ) {
+			rects.remove(this);
+		}
+		cx.fillRect(this.posX, this.posY, this.width, this.height);
+	}
+}
+
+var speed = 5;
+var dirAdd = speed; //initially moves right
+document.addEventListener('click', (e) => {
+	document.getElementById('counter').innerHTML = rects.arr.length+1;
+	let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
+	console.log(e.clientX + " " + e.clientY);
+	console.log(newRect.collides(true));
+	if (!newRect.collides(true)) {
+		rects.addRectangle(newRect);
+	}
+});
+
+document.addEventListener('keydown', keyEvent);
+
+
+var sizeScale = 5;
+function keyEvent (e) {
+	let keyCode = e.keyCode;
+	if (keyCode == 37) { //keyleft
+		rectW+=sizeScale;
+	}
+	else if (keyCode == 39) { //keyright
+		rectW -=sizeScale;
+	}
+	else if (keyCode == 38) { //keyup
+		rectH += sizeScale;
+	}
+	else if (keyCode == 40) { //keydown
+		rectH -= sizeScale
+	}
+}
+
+function draw() {
+	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
+	rects.naturalMovement();
+	rects.spawnRectangles();
+	monster1.drawMonster();
+	monster1.move();
+	requestAnimationFrame(draw);
+}
+
+	/* var monster1 = {
+		width : 50,
+		height : 50,
+		posX : cx.canvas.width/2,
+		posY : function () {return cx.canvas.height-this.height;},
+		properties : new Monster(this.posX, this.posY, this.width, this.height)
+	} */
 
 	var rects = new Rectangles(); 
+	var monster1 = new Monster(cx.canvas.width/2, cx.canvas.height-50,50, 50  );
 	draw();
+
 </script>
 

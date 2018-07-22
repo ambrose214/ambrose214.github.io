@@ -4,7 +4,12 @@ body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
+} 
+p {
+
 }
 canvas {
+	top: 0px;
+    left: 0px;
     position:absolute;
 }
