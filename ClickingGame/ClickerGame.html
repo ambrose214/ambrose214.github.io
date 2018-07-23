@@ -2,8 +2,14 @@
 <link rel="stylesheet" href="ClickerGame.css">
 <body>
 	<div id= 'div1'>
-		<p id="p1"> a</p>
-		<h1 id="counter"> 0 </h1>
+		<h5 id="counter"> Number of Rectangles: 0 </h3>
+		<br>
+		<h2> Preview: </h2>
+		<h5 id="RectanglesWidth"> </h5>
+		<h5 id="RectanglesHeight"> </h5>
+		<br>
+		<p> Use arrow keys to change size <p>
+
 	</div>
 </body>
 
@@ -17,6 +23,8 @@
 
 	var rectW = 20;
 	var rectH = 20;
+	document.getElementById("RectanglesWidth").innerHTML = "Rectangles's width: " + rectW;
+	document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
 
 	class Rectangles {
 		constructor () {
@@ -53,6 +61,12 @@
 			this.width = width;
 			this.height = height;
 		}
+		drawRectangle() {
+			cx.globalAlpha = 0.5;
+			cx.fillRect(this.posX, this.posY, this.width,
+					this.height);
+			cx.globalAlpha = 1;
+		}
 
 		equals (other) {
 			return (this.posX == other.posX && this.posY == other.posY &&
@@ -68,16 +82,17 @@
 					(this.posY <= (rects.arr[i].posY+(rects.arr[i].height))) &&
 					(countsItself || (!countsItself && !this.equals(rects.arr[i])))
 					) {
-					console.log("a");
+					
 				return true;
 			}
-		}
+		}//console.log("a");
 		return false;
 	}
 
 	gravity () {
 		//console.log( !this.collides(false));
-		if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height-this.height)) {
+		if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height)) {
+			/* console.log(cx.canvas.height+ "  "+ (this.posY+this.height) +"    " +(cx.canvas.height-this.height)); */
 			this.posY += 2;
 		}
 			/*if ((!this.collides(otherBoxes)) && this.posY < cx.canvas.height-this.height) {
@@ -112,7 +127,7 @@
 var speed = 5;
 var dirAdd = speed; //initially moves right
 document.addEventListener('click', (e) => {
-	document.getElementById('counter').innerHTML = rects.arr.length+1;
+	document.getElementById('counter').innerHTML = "Number of Rectangles: "+ (rects.arr.length+1);
 	let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
 	console.log(e.clientX + " " + e.clientY);
 	console.log(newRect.collides(true));
@@ -127,24 +142,34 @@ document.addEventListener('keydown', keyEvent);
 var sizeScale = 5;
 function keyEvent (e) {
 	let keyCode = e.keyCode;
-	if (keyCode == 37) { //keyleft
+	if (keyCode == 39 ) { //keyright, increases size
 		rectW+=sizeScale;
+		document.getElementById("RectanglesWidth").innerHTML = "Rectangles's width: " + rectW;
 	}
-	else if (keyCode == 39) { //keyright
+	else if (keyCode == 37 && rectW > sizeScale) { //keyleft, decreases size
 		rectW -=sizeScale;
+		document.getElementById("RectanglesWidth").innerHTML = "Rectangle's width: " + rectW;
 	}
-	else if (keyCode == 38) { //keyup
+	else if (keyCode == 40 ) { //keydown, increases size
 		rectH += sizeScale;
+		document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
 	}
-	else if (keyCode == 40) { //keydown
+	else if (keyCode == 38 && rectH > sizeScale) { //keydown, decreases size
 		rectH -= sizeScale
+		document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
 	}
+}
+
+function drawPreviewRect() {
+	var rectPreview = new Rectangle(100,100, rectW, rectH);
+	rectPreview.drawRectangle();
 }
 
 function draw() {
 	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
 	rects.naturalMovement();
 	rects.spawnRectangles();
+	drawPreviewRect();
 	monster1.drawMonster();
 	monster1.move();
 	requestAnimationFrame(draw);
