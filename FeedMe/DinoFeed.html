@@ -1,32 +1,35 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="ClickerGame.css">
+<link rel="stylesheet" href="DinoFeed.css">
 <body>
-	<div id= 'div1'>
-		<h5 id="counter"> Number of Rectangles: 0 </h3>
-			<br>
-			<h2> Preview: </h2>
+	<div class="noselect">
+		<div id="foodSize">
+			<h3 > Size of Food(Use arrow keys to change size ): </h3>
 			<h5 id="RectanglesWidth"> </h5>
 			<h5 id="RectanglesHeight"> </h5>
-			<br>
-			<p> Use arrow keys to change size <p>
-				<h1 id="MonsterTalk"> <h1>
-				</div>
-			</body>
+		</div>
 
-			<canvas> </canvas>
+		<h5 id="counter"> Food wasted so far: 0 </h5>
+		<h5 id="eaten"> Food eaten so far: 0 </h5>
 
-			<script> 
-	//Current issue with code: code looks ugly with everything only referencing the rects object created rather than a general one
+	</div> 
+</h1>
+</div>
+</body>
+
+<canvas> </canvas>
+
+<script> 
+
 	var cx = document.querySelector("canvas").getContext("2d");
 	cx.canvas.width=window.innerWidth;
 	cx.canvas.height=window.innerHeight;
 
 	var rectW = 20;
 	var rectH = 20;
-	document.getElementById("RectanglesWidth").innerHTML = "Rectangles's width: " + rectW;
-	document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
+	document.getElementById("RectanglesWidth").innerHTML = "Width: " + rectW;
+	document.getElementById("RectanglesHeight").innerHTML = "Height: " + rectH;
 
-	class Rectangles {
+	class Rectangles { 
 		constructor () {
 			this.arr = [];
 		}
@@ -39,7 +42,7 @@
 					this.arr[i].height);
 			}
 		}
-		
+
 		naturalMovement() {
 			for (let i = 0; i < this.arr.length; i++) {
 				this.arr[i].gravity(this.arr);
@@ -113,6 +116,7 @@ class Monster extends Rectangle {
 		this.perImage = 20;
 		this.timeOnFrame = 0;
 		this.faceRight = true;
+		this.foodEaten = 0;
 	}
 	move () {
 		if ((this.posX <= 0 && dirAdd == -speed) ||
@@ -124,8 +128,7 @@ class Monster extends Rectangle {
 }
 
 makeMonsterFatter() {
-	document.getElementById("MonsterTalk").innerHTML = "I'm a hungry hungry monster";
-
+	//document.getElementById("MonsterTalk").innerHTML = "I'm a hungry hungry monster";
 	this.height += 5;
 	this.posY -=5;
 	this.width +=5;
@@ -135,22 +138,41 @@ makeMonsterFatter() {
 drawMonster() {
 	let img1 = document.createElement("img");
 	let img2 = document.createElement("img");
-	if (this.faceRight) {
-		img1.src = "../images/supercooldino1-right.png";
-		img2.src = "../images/supercooldino2-right.png";
+	if (this.faceRight && this.timeOnFrame <= this.perImage/2) { //Odd/Even to alternate open/closed mouth
+		img1.src = "../images/FeedMe/supercooldino1-right.png";
+		img2.src = "../images/FeedMe/supercooldino2-right.png";
 	}
-	else {
-		img1.src = "../images/supercooldino1.png";
-		img2.src = "../images/supercooldino2.png";
+	else if (this.faceRight && this.timeOnFrame > this.perImage/2) {
+		img1.src = "../images/FeedMe/supercooldino1-OpenMouth-right.png";
+		img2.src = "../images/FeedMe/supercooldino2-OpenMouth-right.png";
+	}
+	else if (this.timeOnFrame <= this.perImage/2) { //has to be left
+		img1.src = "../images/FeedMe/supercooldino1.png";
+		img2.src = "../images/FeedMe/supercooldino2.png";
+	}
+	else if (this.timeOnFrame > this.perImage/2) {
+		img1.src = "../images/FeedMe/supercooldino1-OpenMouth.png";
+		img2.src = "../images/FeedMe/supercooldino2-OpenMouth.png";
 	}
 	monsterFrames[0] = img1;
 	monsterFrames[1] = img2;
 
 	for (let i = 0; i < rects.arr.length; i++) {
-		if (this.collides(rects.arr[i]) ) {
+		let monsterMouth; //Rough estimate of where the mouth is to collide with foood
+		if (this.faceRight) {
+			monsterMouth = new Monster(this.posX+this.width*0.75, this.posY+this.height*0.5, this.width/4 + this.width*0.1, this.height/3);
+		}
+		else {
+			monsterMouth = new Monster(this.posX+this.width*0.2, this.posY+this.height*0.5, this.width/4, this.height/3);
+		}
+		
+		if (rects.arr[i].collides(monsterMouth) ) { //Makes monster eat food
+			this.foodEaten++;
+			document.getElementById("eaten").innerHTML = "Food eaten so far: " + this.foodEaten ;
 			rects.remove(rects.arr[i]);
 			this.makeMonsterFatter();
 		}
+		
 	}
 		if (this.timeOnFrame == this.perImage) { //Once time wanted on image is needed is done, switch to next
 			this.frameCounter++;
@@ -161,6 +183,10 @@ drawMonster() {
 		}
 		cx.drawImage(monsterFrames[this.frameCounter], 0, 0, monsterFrames[this.frameCounter].width, monsterFrames[this.frameCounter].height, this.posX, this.posY, this.width, this.height);
 		this.timeOnFrame++;
+	}
+
+	monsterEat() {
+		
 	}
 
 	addMonsterFrames() {
@@ -180,7 +206,7 @@ drawMonster() {
 var speed = 5;
 var dirAdd = speed; //initially moves right
 document.addEventListener('click', (e) => {
-	document.getElementById('counter').innerHTML = "Number of Rectangles: "+ (rects.arr.length+1);
+	document.getElementById('counter').innerHTML = "Food wasted so far: "+ (rects.arr.length+1);
 	let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
 	console.log(e.clientX + " " + e.clientY);
 	console.log(newRect.collides(true));
@@ -197,19 +223,19 @@ function keyEvent (e) {
 	let keyCode = e.keyCode;
 	if (keyCode == 39 ) { //keyright, increases size
 		rectW+=sizeScale;
-		document.getElementById("RectanglesWidth").innerHTML = "Rectangles's width: " + rectW;
+		document.getElementById("RectanglesWidth").innerHTML = "Width: " + rectW;
 	}
 	else if (keyCode == 37 && rectW > sizeScale) { //keyleft, decreases size
 		rectW -=sizeScale;
-		document.getElementById("RectanglesWidth").innerHTML = "Rectangle's width: " + rectW;
+		document.getElementById("RectanglesWidth").innerHTML = "Width: " + rectW;
 	}
 	else if (keyCode == 40 ) { //keydown, increases size
 		rectH += sizeScale;
-		document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
+		document.getElementById("RectanglesHeight").innerHTML = "Hight: " + rectH;
 	}
 	else if (keyCode == 38 && rectH > sizeScale) { //keydown, decreases size
 		rectH -= sizeScale
-		document.getElementById("RectanglesHeight").innerHTML = "Rectangle's height: " + rectH;
+		document.getElementById("RectanglesHeight").innerHTML = "Height: " + rectH;
 	}
 }
 
@@ -240,6 +266,7 @@ function draw() {
 	var monster1 = new Monster(cx.canvas.width/2, cx.canvas.height-200,200, 200  );
 	var monsterFrames = [];
 	monster1.addMonsterFrames();
+	var monsterFood = ["black", "grey", "beige", "red", "gold"];
 	draw();
 
 </script>
