@@ -3,19 +3,19 @@
 <body>
 	<div id= 'div1'>
 		<h5 id="counter"> Number of Rectangles: 0 </h3>
-		<br>
-		<h2> Preview: </h2>
-		<h5 id="RectanglesWidth"> </h5>
-		<h5 id="RectanglesHeight"> </h5>
-		<br>
-		<p> Use arrow keys to change size <p>
+			<br>
+			<h2> Preview: </h2>
+			<h5 id="RectanglesWidth"> </h5>
+			<h5 id="RectanglesHeight"> </h5>
+			<br>
+			<p> Use arrow keys to change size <p>
+			<h1 id="MonsterTalk"> <h1>
+			</div>
+		</body>
 
-	</div>
-</body>
+		<canvas> </canvas>
 
-<canvas> </canvas>
-
-<script> 
+		<script> 
 	//Current issue with code: code looks ugly with everything only referencing the rects object created rather than a general one
 	var cx = document.querySelector("canvas").getContext("2d");
 	cx.canvas.width=window.innerWidth;
@@ -45,53 +45,64 @@
 				this.arr[i].gravity(this.arr);
 			}
 		}
-		remove(other) {
+
+				//countsItself is for if you want the collission to count for itself
+		collides(rect, countsItself) { //Have to account for clicking outside the area but still builds into it
+			let collidesTop = false;
+			let collidesBottom = false;
+
 			for (let i = 0; i < this.arr.length; i++) {
-				if (this.arr[i].equals(other)) {
-					this.arr.splice(i, 1);
-				}
+				if ((rect.posX >= this.arr[i].posX-(this.arr[i].width)) && 
+					(rect.posX <= (this.arr[i].posX+(this.arr[i].width))) &&
+					(rect.posY+rect.height >= this.arr[i].posY) && 
+					(rect.posY <= (this.arr[i].posY)) &&
+					(countsItself || (!countsItself && !rect.equals(this.arr[i])))
+					) {
+				// random
+			return true;
+		}
+		}//console.log("a");
+		return false;
+	}
+	remove(rectangle) {
+		for (let i = 0; i < this.arr.length; i++) {
+			if (this.arr[i].equals(rectangle)) {
+				this.arr.splice(i, 1);
 			}
 		}
 	}
+}
 
-	class Rectangle {
-		constructor (posX, posY, width, height) {
-			this.posX = posX;
-			this.posY = posY;
-			this.width = width;
-			this.height = height;
-		}
-		drawRectangle() {
-			cx.globalAlpha = 0.5;
-			cx.fillRect(this.posX, this.posY, this.width,
-					this.height);
-			cx.globalAlpha = 1;
-		}
+class Rectangle {
+	constructor (posX, posY, width, height) {
+		this.posX = posX;
+		this.posY = posY;
+		this.width = width;
+		this.height = height;
+	}
+	drawRectangle() {
+		cx.globalAlpha = 0.5;
+		cx.fillRect(this.posX, this.posY, this.width,
+			this.height);
+		cx.globalAlpha = 1;
+	}
 
-		equals (other) {
-			return (this.posX == other.posX && this.posY == other.posY &&
-				this.width == other.width && this.height == other.height);
-		}
+	equals (other) {
+		return (this.posX == other.posX && this.posY == other.posY &&
+			this.width == other.width && this.height == other.height);
+	}
 
-		//countsItself is for if you want the collission to count for itself
-		collides(countsItself) { //Have to account for clicking outside the area but still builds into it
-			for (let i = 0; i < rects.arr.length; i++) {
-				if ((this.posX >= rects.arr[i].posX-(rects.arr[i].width)) && 
-					(this.posX <= (rects.arr[i].posX+(rects.arr[i].width))) &&
-					(this.posY >= rects.arr[i].posY-(rects.arr[i].height)) && 
-					(this.posY <= (rects.arr[i].posY+(rects.arr[i].height))) &&
-					(countsItself || (!countsItself && !this.equals(rects.arr[i])))
-					) {
-				aa	
-				return true;
-			}
-		}//console.log("a");
-		return false;
+	collides(other) {
+		return ((this.posX >= other.posX-(other.width)) && 
+			(this.posX <= (other.posX+(other.width))) &&
+			(this.posY >= other.posY-(other.height)) && 
+			(this.posY <= (other.posY+(other.height))) 
+			);
 	}
 
 	gravity () {
 		//console.log( !this.collides(false));
-		if ( !this.collides(false) && (this.posY+this.height < cx.canvas.height)) {
+		if ( !rects.collides(this, false) && (this.posY+this.height < cx.canvas.height)) {
 			/* console.log(cx.canvas.height+ "  "+ (this.posY+this.height) +"    " +(cx.canvas.height-this.height)); */
 			this.posY += 2;
 		}
@@ -114,13 +125,26 @@
 				(this.posX >= cx.canvas.width && dirAdd == speed))  {
 				dirAdd = -dirAdd;
 		}
+		
 		this.posX += dirAdd;
 	}
+
+	makeMonsterFatter() {
+		document.getElementById("MonsterTalk").innerHTML = "I'm a hungry hungry monster";
+		
+		this.height +=5;
+
+	}
+
 	drawMonster() {
-		if (this.collides(rects) ) {
-			rects.remove(this);
+		for (let i = 0; i < rects.arr.length; i++) {
+			if (this.collides(rects.arr[i]) ) {
+				rects.remove(rects.arr[i]);
+				this.makeMonsterFatter();
+			}
 		}
 		cx.fillRect(this.posX, this.posY, this.width, this.height);
+
 	}
 }
 
@@ -131,7 +155,7 @@ document.addEventListener('click', (e) => {
 	let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
 	console.log(e.clientX + " " + e.clientY);
 	console.log(newRect.collides(true));
-	if (!newRect.collides(true)) {
+	if (!rects.collides(newRect,true)) {
 		rects.addRectangle(newRect);
 	}
 });
