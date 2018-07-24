@@ -160,13 +160,13 @@ drawMonster() {
 	for (let i = 0; i < rects.arr.length; i++) {
 		let monsterMouth; //Rough estimate of where the mouth is to collide with foood
 		if (this.faceRight) {
-			monsterMouth = new Monster(this.posX+this.width*0.75, this.posY+this.height*0.5, this.width/4 + this.width*0.1, this.height/3);
+			monsterMouth = new Monster(this.posX+this.width*0.75, this.posY+this.height*0.3, this.width/4, this.height*0.2);
 		}
 		else {
-			monsterMouth = new Monster(this.posX+this.width*0.2, this.posY+this.height*0.5, this.width/4, this.height/3);
+			monsterMouth = new Monster(this.posX+this.width*0.2, this.posY+this.height*0.3, this.width/4, this.height*0.2);
 		}
 		
-		if (rects.arr[i].collides(monsterMouth) ) { //Makes monster eat food
+		if (rects.arr[i].collides(monsterMouth) || monsterMouth.collides(rects.arr[i]) ) { //Makes monster eat food
 			this.foodEaten++;
 			document.getElementById("eaten").innerHTML = "Food eaten so far: " + this.foodEaten ;
 			rects.remove(rects.arr[i]);
