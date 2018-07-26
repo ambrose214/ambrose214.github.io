@@ -178,6 +178,9 @@ img1.src = "img/thomasthedankenginev2ToRight.png";
 let img2 = document.createElement("img");
 img2.src = "img/thomasthedankenginev2ToLeft.png";
 
+let img3 = document.createElement('img');
+img3.src = "img/spooky.png"
+
 var trainToRight = true;
 
 
@@ -188,6 +191,7 @@ var trainToRight = true;
 		cx.beginPath();
 		//cx.fillRect(posX, posY, charW, charH);
 		drawBackGround();
+		cx.drawImage(img3, 0, 0, img3.width, img3.width, posX, 0, charW,charH);
 		if (trainToRight) {
 			cx.drawImage(img1, 0, 0, img1.width, img1.height, posX, posY, charW, charH);
 		}
