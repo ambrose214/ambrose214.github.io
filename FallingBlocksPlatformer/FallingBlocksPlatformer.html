@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="FallingBlocksPlatformer.css">
+<body>
+	<div class="noselect">
+		<div id="foodSize">
+			<h3 > Press q to drop teleport pad, press again to go back: </h3>
+			<h5 id="TimesHit"> Times hit: 0 </h5>
+			<h5 id="RectanglesHeight"> </h5>
+		</div>
+
+		<h5 id="counter"></h5>
+		<h5 id="eaten">  </h5>
+
+	</div> 
+</h1>
+</div>
+</body>
+
+<canvas> </canvas>
+<script> //to do: make a falling rectnagles object (maybe make single then all together), make controls for a character, 
+var allColors =  ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]; 
+var colorCounter = 0;
+
+var cx = document.querySelector("canvas").getContext("2d");
+cx.canvas.width=window.innerWidth;
+cx.canvas.height=window.innerHeight;
+
+class BaseObjects {
+	constructor (posX, posY, width, height) {
+		this.posX = posX;
+		this.posY = posY;
+		this.width = width;
+		this.height = height;
+		this.gravity = 3;
+		this.canJump = false;
+	}
+	environmentImpacts () {
+		this.applyGravity();
+	}
+	applyGravity () {
+		if (this.posY+this.height < cx.canvas.height) {
+			this.posY += this.gravity;
+		}
+
+	}
+}
+
+class FireBalls {
+	constructor() {
+		this.arr = [];
+		this.width = 20;
+		this.height = 5;
+		this.limit = 5;
+	}
+	move() {
+		for (let i = 0; i < this.arr.length; i++) {
+
+			this.arr[i].posX-=this.arr[i].xSpeed;
+			if (this.arr[i].posX+this.arr[i].width <= 0) {
+				this.arr.splice(i,1);
+			}
+		}
+	}
+	draw () {
+		for (let i = 0; i <this.arr.length; i++) {
+			this.arr[i].draw();
+		}
+	}
+	spawn() {
+		if (this.arr.length < this.limit) {
+			console.log(this.arr.length);
+			let fireBall = new FireBall(cx.canvas.width- this.width, Math.floor(Math.random()*(cx.canvas.height-this.width)), this.width, this.height);
+			this.arr.push(fireBall);
+		}
+	}
+}
+
+class FireBall extends BaseObjects {
+	constructor (posX, posY, width, height) {
+		super(posX, posY, width, height);
+		this.xSpeed =50;
+		this.color = "Crimson";
+		this.hit = false;
+	}
+	draw() {
+		//console.log("drawing fireballs");
+		cx.beginPath();
+		cx.fillStyle = this.color;
+		//console.log("x:" + this.posX + "  y:" + this.posY + "   width:" + this.width + "   height:" + this.height); 
+		cx.arc(this.posX, this.posY, this.width, 0.5 * Math.PI, 1.5* Math.PI);
+		cx.fill();
+		cx.stroke();
+	}
+}
+
+class FallingBlocks {
+	constructor () {
+		this.arr = [];
+		this.defaultNumber = 10;
+		this.height = 50;
+		this.width = 50;
+		for (let i = 0; i < this.defaultNumber; i++) {
+			this.arr.push(new FallingBlock((cx.canvas.width/10)*i, 20*(this.defaultNumber-i), this.width, this.height));
+		}
+	}
+	drawBlocks () {
+		for (let i = 0; i < this.arr.length; i++) {
+			this.arr[i].drawBlock();
+		}
+	}
+	applyImpacts () {
+		for (let i = 0; i < this.arr.length; i++) {
+			this.arr[i].environmentImpacts();
+		}
+	}
+	addBlock (block) {
+		this.arr.push(block);
+	}
+}
+
+class FallingBlock extends BaseObjects{
+	constructor (posX, posY, width, height) {
+		super(posX, posY, width, height);
+		this.color = "DarkRed";
+		this.gravity = 1;
+	}
+	drawBlock () {
+		//console.log(this.posX + " " + this.posY + " " + this.width + " " + this.height);
+		this.resetBlock();
+		let colorBefore = cx.fillStyle;
+		cx.fillStyle = this.color;
+		cx.fillRect(this.posX, this.posY, this.width, this.height);
+		cx.fillStyle = colorBefore;
+	}
+	resetBlock() {
+		if (this.posY+this.height >= cx.canvas.height) {
+			this.posY = 0;
+		}
+	}
+}
+
+class Character extends BaseObjects{
+	constructor (posX, posY, width, height, color) {
+		super(posX, posY, width, height);
+		this.color = color;
+		this.defaultGravity = 3;
+		this.gravity = this.defaultGravity;
+		this.canJump = true;
+		this.jumpBy = 0;
+		this.teleRock = {
+			active: false,
+			posX,
+			posY,
+			size: 10,
+			color: "LightSkyBlue ",
+		}
+		this.lastIndexCollideBlock;
+		this.LastIndexCollideFireBall;
+		this.faceRight = true;
+		this.charFrame = 0;
+		this.timesHit = 0;
+	}
+	drawCharacter () {
+		if (this.posY+this.height >= cx.canvas.height) {
+			this.canJump = true;
+			this.gravity = this.defaultGravity;
+		}
+		this.applyKeyCodes();
+		this.staysOnTop(blocks);
+		this.jumpAnimation();
+		this.collidesAll();
+
+		//draw portal
+		if (this.teleRock.active) {
+			cx.beginPath();
+			cx.fillStyle = this.teleRock.color;
+			cx.arc(this.teleRock.posX, this.teleRock.posY, this.teleRock.size, 0, 2 * Math.PI);
+			cx.fill();
+			cx.stroke();
+		}
+
+		//Drawing Character itself
+		/* As a rect 
+		let colorBefore = cx.fillStyle;
+		cx.fillStyle = this.color;
+		cx.fillRect(this.posX, this.posY, this.width, this.height);
+		cx.fillStyle = colorBefore; */
+		if (this.charFrame >= charRFrames.length ) { //assume both use same number of frames 
+			this.charFrame = 0;
+		}
+		if (this.faceRight) {
+			cx.drawImage(charRFrames[this.charFrame], 0, 0, charRFrames[this.charFrame].width, charRFrames[this.charFrame].height, this.posX, this.posY, this.width, this.height);
+		}
+		else {
+			cx.drawImage(charLFrames[this.charFrame], 0, 0, charLFrames[this.charFrame].width, charLFrames[this.charFrame].height, this.posX, this.posY, this.width, this.height);
+		}
+	}
+	applyKeyCodes () {
+		if  (keysDown.spacebar && this.canJump) { 
+			this.jumpBy = 150;
+			this.canJump = false;
+			this.gravity = this.defaultGravity;
+			this.lastIndexCollideBlock = -1; //so that every jump lets the same block change color
+		} //has to be on ground to jump
+		if  (keysDown.left) {
+			this.posX -= 5;
+			this.faceRight = false;
+			if (time%5 == 0) {this.charFrame++};
+		}
+		if  (keysDown.right) { 
+			this.posX += 5;
+			this.faceRight = true;
+			if (time%5 == 0) {this.charFrame++};
+		}
+		if  (keysDown.down && character.posY+character.height < cx.canvas.height ) { this.posY += 5;}
+		
+	}
+
+	jumpAnimation () {
+		let frameJumps = 20;
+		if (this.jumpBy > 0) {
+			this.posY -=  frameJumps;
+			this.jumpBy -= frameJumps;
+		}
+	}
+
+	teleport() {
+		if (!this.teleRock.active) {
+			this.teleRock.posX = this.posX+(this.width/2)-(this.teleRock.size/2);
+			this.teleRock.posY = this.posY+(this.height/2)-(this.teleRock.size/2);
+			this.teleRock.active = true;
+		}
+		else if (this.teleRock.active) {
+			this.posX = this.teleRock.posX+(this.teleRock.size/2)-(this.width/2);
+			this.posY = this.teleRock.posY+(this.teleRock.size/2)-(this.height/2);
+			this.teleRock.active = false;
+		}	
+	}
+	staysOnTop (blocks) {
+		//console.log(Math.floor(1/5));
+		//console.log((Math.floor(this.posY+this.height - blocks.arr[0].posY) / 10));
+		//console.log(this.gravity*blocks.arr[0].gravity);
+		let collidesAtAll = false;
+		for (let i = 0; i < blocks.arr.length; i++ ) {
+			if (this.posX < blocks.arr[i].posX+blocks.arr[i].width && 
+				this.posX+this.width > blocks.arr[i].posX &&
+				(this.posY+this.height - blocks.arr[i].posY < 5 &&
+				 this.posY+this.height - blocks.arr[i].posY > -5 ) ) { //collides within a multiple of each others gravity
+				collidesAtAll = true;
+			this.gravity = blocks.arr[i].gravity;
+			blocks.arr[i].gravity = 0;
+			this.canJump = true;
+
+
+			if (this.lastIndexCollideBlock != i) {
+				if (colorCounter >= allColors.length) {
+					colorCounter = 0;
+				}
+				blocks.arr[i].color = allColors[colorCounter];
+				colorCounter++;
+			}
+			this.lastIndexCollideBlock = i;
+
+
+		}
+	}
+	if (!collidesAtAll) {
+		this.gravity = this.defaultGravity;
+	}
+}
+collidesAll() {
+	for (let i = 0; i < fireBalls.arr.length; i++) {
+		if (this.posX < fireBalls.arr[i].posX+fireBalls.arr[i].width && 
+			this.posX+this.width > fireBalls.arr[i].posX && 
+			this.posY < fireBalls.arr[i].posY+fireBalls.arr[i].height &&
+			this.posY+this.height > fireBalls.arr[i].posY) {
+
+			if (!fireBalls.arr[i].hit) {
+				this.timesHit++;
+				document.getElementById("TimesHit").innerHTML = "Times Hit: " + this.timesHit;
+			}
+			fireBalls.arr[i].hit = true;
+		}
+	}
+}
+}
+
+
+
+var keysDown = {
+	spacebar: false, 
+	left: false, 
+	right: false,
+	down: false,
+	q: false,
+}; 
+document.addEventListener('keydown', (e) => {
+	let keyCode = e.keyCode;
+	if (keyCode == 32 ) { keysDown.spacebar= true; }
+	if (keyCode == 37 ) { keysDown.left = true; }
+	if (keyCode == 39 ) { keysDown.right= true; }
+	if (keyCode == 40 ) { keysDown.down = true; }
+	if (keyCode == 81) { character.teleport();}
+});
+document.addEventListener('keyup', (e) => {
+	let keyCode = e.keyCode;
+	if (keyCode == 32 ) { keysDown.spacebar = false; }
+	if (keyCode == 37 ) { keysDown.left = false; }
+	if (keyCode == 39 ) { keysDown.right = false; }
+	if (keyCode == 40 ) { keysDown.down = false; }
+	//if (keyCode == 81) {keysDown.q = false;}
+});
+
+
+function defaultState () {
+
+}
+
+function draw() {
+	console.log(character.teleRock.active);
+	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
+	blocks.drawBlocks();
+	character.drawCharacter();
+	blocks.applyImpacts();
+	character.environmentImpacts();
+	time++;
+	if (time%10 == 0) {
+		fireBalls.move();
+	}
+	if (time%10 == 0) {
+		fireBalls.spawn();
+	}
+	fireBalls.draw();
+	requestAnimationFrame(draw);
+}
+
+// defaultState();
+var blocks = new FallingBlocks; 
+var character = new Character(0, cx.canvas.height-200, 200, 200, "indigo");
+var fireBalls = new FireBalls();
+var time = 0;
+
+var charRFrames = [];
+var img1R = document.createElement("img");``
+img1R.src = "../images/FeedMe/supercooldino1-right.png";
+var img2R = document.createElement("img");``
+img2R.src = "../images/FeedMe/supercooldino2-right.png";
+charRFrames = [img1R, img2R];
+
+var charLFrames = [];
+var img1L = document.createElement("img");``
+img1L.src = "../images/FeedMe/supercooldino1.png";
+var img2L = document.createElement("img");``
+img2L.src = "../images/FeedMe/supercooldino2.png";
+charLFrames = [img1L, img2L];
+
+draw();
+
+
+</script>

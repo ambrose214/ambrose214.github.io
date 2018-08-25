@@ -38,6 +38,7 @@
 		}
 		spawnRectangles() {
 			for (let i = 0; i < this.arr.length; i++) {
+				cx.fillStyle = this.arr[i].color;
 				cx.fillRect(this.arr[i].posX, this.arr[i].posY, this.arr[i].width,
 					this.arr[i].height);
 			}
@@ -82,6 +83,7 @@ class Rectangle {
 		this.posY = posY;
 		this.width = width;
 		this.height = height;
+		this.color = "brown";
 	}
 	drawFaintRect() {
 		cx.globalAlpha = 0.5;
@@ -117,6 +119,7 @@ class Monster extends Rectangle {
 		this.timeOnFrame = 0;
 		this.faceRight = true;
 		this.foodEaten = 0;
+		this.breathe = false;
 	}
 	move () {
 		if ((this.posX <= 0 && dirAdd == -speed) ||
@@ -129,28 +132,28 @@ class Monster extends Rectangle {
 
 makeMonsterFatter() {
 	//document.getElementById("MonsterTalk").innerHTML = "I'm a hungry hungry monster";
-	this.height += rectH/4;
-	this.posY -= rectH/4;
-	this.width +=rectW/4;
+	this.height += rectH;
+	this.posY -= rectH;
+	this.width +=rectW;
 
 }
 
 drawMonster() {
 	let img1 = document.createElement("img");
 	let img2 = document.createElement("img");
-	if (this.faceRight && this.timeOnFrame <= this.perImage/2) { //Odd/Even to alternate open/closed mouth
+	if (this.faceRight && this.timeOnFrame <= this.perImage/2 && (this.faceRight && !this.breathe)) { //Odd/Even to alternate open/closed mouth
 		img1.src = "../images/FeedMe/supercooldino1-right.png";
 		img2.src = "../images/FeedMe/supercooldino2-right.png";
 	}
-	else if (this.faceRight && this.timeOnFrame > this.perImage/2) {
+	else if (this.faceRight && this.timeOnFrame > this.perImage/2 || (this.faceRight && this.breathe)) {
 		img1.src = "../images/FeedMe/supercooldino1-OpenMouth-right.png";
 		img2.src = "../images/FeedMe/supercooldino2-OpenMouth-right.png";
 	}
-	else if (this.timeOnFrame <= this.perImage/2) { //has to be left
+	else if (this.timeOnFrame <= this.perImage/2 && !this.breathe) { //has to be left
 		img1.src = "../images/FeedMe/supercooldino1.png";
 		img2.src = "../images/FeedMe/supercooldino2.png";
 	}
-	else if (this.timeOnFrame > this.perImage/2) {
+	else if (this.timeOnFrame > this.perImage/2  || this.breathe) {
 		img1.src = "../images/FeedMe/supercooldino1-OpenMouth.png";
 		img2.src = "../images/FeedMe/supercooldino2-OpenMouth.png";
 	}
@@ -189,6 +192,29 @@ drawMonster() {
 		
 	}
 
+	breatheFire () {
+		let fireImg = document.createElement("img");
+		let monsterBreathe; 
+		if (this.faceRight) {
+			fireImg.src = "../images/FeedMe/superfireBreathe-right.png";
+			cx.drawImage(fireImg, 0, 0, fireImg.width, fireImg.height, this.posX+this.width, this.posY-(this.height/3), fireImg.width, this.height);
+			monsterBreathe = new Monster(this.posX+this.width, this.posY-(this.height/3), fireImg.width, this.height);
+		}
+		else {
+			fireImg.src = "../images/FeedMe/superfireBreathe-left.png";
+			cx.drawImage(fireImg, 0, 0, fireImg.width, fireImg.height, this.posX-fireImg.width, this.posY-(this.height/3), fireImg.width, this.height);
+			monsterBreathe = new Monster(this.posX-fireImg.width, this.posY-(this.height/3), fireImg.width, this.height);
+		}
+		for (let i = 0;  i < rects.arr.length; i++) {
+			if (rects.arr[i].collides(monsterBreathe)) {
+				rects.arr[i].color = "black";
+			}
+		}
+	}
+
+
+
+
 	addMonsterFrames() {
 		let img1 = document.createElement("img");
 		img1.src = "../images/supercooldino1-right.png";
@@ -216,6 +242,9 @@ document.addEventListener('click', (e) => {
 });
 
 document.addEventListener('keydown', keyEvent);
+document.addEventListener('keyup', () => {monster1.breathe = false;} );
+
+
 
 
 var sizeScale = 5;
@@ -237,6 +266,9 @@ function keyEvent (e) {
 		rectH -= sizeScale
 		document.getElementById("RectanglesHeight").innerHTML = "Height: " + rectH;
 	}
+	else if (keyCode == 70) {
+		monster1.breathe = true;
+	}
 }
 
 function drawPreviewRect() {
@@ -248,6 +280,7 @@ function draw() {
 	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
 	monster1.drawMonster();
 	monster1.move();
+	if (monster1.breathe) {monster1.breatheFire();}
 	//monster2.drawMonster();
 	//monster2.move();
 	rects.naturalMovement();
