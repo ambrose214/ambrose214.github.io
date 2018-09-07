@@ -1,20 +1,85 @@
-p {
-	color: black;	
-	
+* {
+	margin:0;
+	padding:0;
+	font-family: Times New Roman;
+}
+
+a {color:#3C4070;}
+
+html, body {
+	height:100%;
+}
+
+h1 {
+	font-size: 5vw;
+	text-align: center;
+}
+
+h2 {
+	text-align: center;
+}
+
+body {
+
+	font-size: 100%;
+	background-color:#0c0129;
+	background-image:url(images/Background/Horizon.jpg);
+	background-position: center;
+	background-size:cover;
+	/* background-blend-mode: soft-light; */
 }
 
 
-div {
-	background-color: rgb(233,150,122);
-	
+p {
+	font-size: 3vw;
+	color: black;	
+	background-color: #696295;
 	border: 3px solid Salmon;
 }
 
+div {
+	
+	
+}
+
+.panels {
+
+	 display: block;
+    
+}
+
 .panel {
- margin-bottom:20px;
- background-color:#fff;
- border:1px solid transparent;
- border-radius:4px;
- -webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
- box-shadow:0 1px 1px rgba(0,0,0,.05)
+	/* letter-spacing: 3px; 
+	text-shadow: 3px 2px red;
+	font-size:10vw 
+	transition: background-color 2000ms;
+
+	display:inline-block;*/
+	
+	text-align: center;
+	margin-left: auto;
+    margin-right: auto;
+	font-weight: bold;
+	font-size: 2vw;
+	border-radius: 25px;
+	text-decoration: bold;
+	width: 50%;
+	margin-right: :20px;
+	background-color:#FEC969;
+	border:2px solid;
+	border-color: #3C4070; 
+	border-radius:4px;
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
+	box-shadow:0 1px 1px rgba(0,0,0,.05);
+
+
+ line-height:44px;
+
+ border-radius:24px;
+ padding: 2vw;
+	
+}
+
+.panel:hover {
+	background-color: #FEC329;
 }
