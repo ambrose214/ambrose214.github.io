@@ -2,6 +2,7 @@
 	margin:0;
 	padding:0;
 	font-family: Times New Roman;
+	color: white;
 }
 
 a {color:#3C4070;}
@@ -10,42 +11,77 @@ html, body {
 	height:100%;
 }
 
+canvas {
+	position:absolute;
+	height: 90%;
+	width: 90%;
+	z-index: -1;
+}
+
+
+
 h1 {
 	font-size: 5vw;
+	position:absolute;
 	text-align: center;
+	 right: 40vw;
+}
+
+#titleHeader {
+	display: block;
+	position: sticky;
+	width: 100%;
+	height: 5vw;
+}
+
+#myDescription {
+	width: 30%;
+	font-size: 2vw;
+	background-color: black;
+	border:2px solid;
+	border-color: rgb(140, 115, 115); 
 }
 
 h2 {
-	text-align: center;
+	font-size: 4vw;
+	color: white;
 }
 
 body {
 
 	font-size: 100%;
-	background-color:#0c0129;
-	background-image:url(images/Background/Horizon.jpg);
+	background-color:#2A1617;
+	background-image:url(images/Background/moon.jpg);
 	background-position: center;
 	background-size:cover;
+	background-repeat: no-repeat;
 	/* background-blend-mode: soft-light; */
 }
 
 
 p {
 	font-size: 3vw;
-	color: black;	
-	background-color: #696295;
-	border: 3px solid Salmon;
 }
 
 div {
 	
 	
 }
-
+form {
+	font-size: 5vw;
+	width: 10vw;
+	height: 5vw;
+}
+ul {
+	list-style: none;
+}
 .panels {
+	background-color: #212121;
+	display: block;
+	text-align: center;
+	float:right;
+	width: 50%;
 
-	 display: block;
-    
 }
 
 .panel {
@@ -57,29 +93,55 @@ div {
 	display:inline-block;*/
 	
 	text-align: center;
-	margin-left: auto;
-    margin-right: auto;
+	margin-left: 0;
+	margin-right: 0;
 	font-weight: bold;
 	font-size: 2vw;
 	border-radius: 25px;
 	text-decoration: bold;
-	width: 50%;
-	margin-right: :20px;
-	background-color:#FEC969;
+	background-color:black;
 	border:2px solid;
-	border-color: #3C4070; 
-	border-radius:4px;
+	border-color: rgb(140, 115, 115); 
 	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
 	box-shadow:0 1px 1px rgba(0,0,0,.05);
 
-
- line-height:44px;
-
- border-radius:24px;
- padding: 2vw;
-	
+	text-transform: uppercase;
+	position: relative;
+	line-height:10%;
+	padding: 1vw;
+	display: table;
+	width: 40%;
+	float:left;
 }
 
+.left-column {
+	padding: 1vw;
+	width: 40%;
+	float:left;
+}
+.right-column {
+	padding: 1vw;
+	width: 50%;
+	float: right;
+}
+
+.left.panel {
+	width: 90%;
+	float:right; 
+}
+.right.panel {
+	width: 100%;
+	float:right; 
+}
 .panel:hover {
-	background-color: #FEC329;
+	background-color: white;
+	color: black;
+}
+
+#myDescription {
+	width: 30%;
+	font-size: 2vw;
+	background-color: black;
+	border:2px solid;
+	border-color: rgb(140, 115, 115); 
 }

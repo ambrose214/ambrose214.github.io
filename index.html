@@ -1,68 +1,140 @@
 <!DOCTYPE html>
+<head>
+	<meta charset= utf-8>
+	<link rel="stylesheet" href="index.css">
+	<script src="jquery-3.3.1.min.js"></script>
 
-<meta charset= utf-8>
-<link rel="stylesheet" href="index.css">
-<script src="jquery-3.3.1.min.js"></script>
+	<title> My home page </title>
+</head>
 
-<title> My home page </title>
+<body>
+	<div id="titleHeader"> 
+		<h1 id="title"> H O M E
+			<hr></h1>
+			
+		</div>
+		
 
-<h1> My home page </h1>
-<div>
-	<p id = "myDescription"> 
 
-		<p> </p>
+		<br>
+
+		<div class = "panels">
+			<h2> P r o j e c t s </h2>
+			<hr>
+			<ul>
+				<div class = "left-column">
+					<li>
+						<a href="FeedMe/DinoFeed.html">
+							<div class = "left link panel"> 
+								Dino Feed 
+							</div>
+						</a>
+					</li>
+					<li>	
+						<a href="FallingBlocksPlatformer/FallingBlocksPlatformer.html"> 
+							<div class = "left link panel"> 
+								Dino Be
+							</div>
+						</a>
+					</li>
+				</div>
+				<div class = "right-column">
+					<li >
+						<a href="SquareBounce/mainCharv4.html">
+							<div class = "right link panel"> 
+								Bounce the Squares!
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="Game/game1Normal.html">
+							<div class = "right link panel"> 
+								SpikeDrops
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="ThomasDankEngine/index.html">
+							<div class = "right link panel"> 
+								Tom the Engine
+							</div>
+						</a>
+					</li>
+
+					<li>
+						<a href="ClickingGame/ClickerGame.html">
+							<div class = "right link panel"> 
+								Clicking Game
+							</div>
+						</a>
+					</li>
+				</div>
+			</ul>
+
+		</div>
+
+		<canvas id= width=height> 
+
+		</canvas>
+
+		<div>
+			<p id = "myDescription"> </p>
+
+			<p> </p>
 <!--
 		<label for="Answer">Do you want to play a game? </label>
 		<input type="text id="Answer" placeholder="">
 	-->
 </div> 
 
-<br>
-<h2> Projects </h2>
-<div class = panels"> 
-	<div class = "link panel"> 
-		<a href="FeedMe/DinoFeed.html">Dino Feed </a>
-	</div>
-
-	<div class = "link panel"> 
-		<a href="FallingBlocksPlatformer/FallingBlocksPlatformer.html"> Dino Be</a>
-	</div>
-
-	<div class = "link panel"> 
-		<a href="SquareBounce/mainCharv4.html">Bounce the Squares!</a>
-	</div>
-
-	<div class = "link panel"> 
-		<a href="Game/game1Normal.html">SpikeDrops</a>
-	</div>
-
-	<div class = "link panel"> 
-		<a href="ThomasDankEngine/index.html">Thomas the Dank Engine</a>
-	</div>
-
-	<div class = "link panel"> 
-		<a href="ClickingGame/ClickerGame.html">ClickingGame</a>
-	</div>
-
-</div>
-
-
+</body>
 
 <script>
 
 	var i = 0;
+	var k = 0; //counts up to speed for time it takes to addd a new letter
+	var fontCounter = 0;
+	var fontFamilies = ["Georgia", "Palatino Linotype", "Book Antiqua", "Times New Roman", "Arial", "Helvetica", "Arial Black", "Impact", "Lucida Sans Unicode", "Tahoma", "Verdana", "Courier New", "Lucida Console", "initial"];
+	var fontSpeedCounter = 0;
+	var fontSpeed = 100;
 	var txt = 'Hello, I am Ambrose. This is the homepage of my website! Feel free to look around!';
-	var speed = 200;
+	var speed = 1; //how many cycles for each letter
 	function writeText () {
+		if (k == speed) { 
+			if (i < txt.length) {
+				//document.getElementById("myDescription").innerHTML += txt.charAt(i);
+				document.getElementById("myDescription").innerHTML += txt.charAt(i);
+				i++
+			}
 
-
-		if (i < txt.length) {
-			document.getElementById("myDescription").innerHTML += txt.charAt(i);
-			i++;
+			k = 0;
 		}
+		k++;
 		requestAnimationFrame(writeText, speed);
 	}
+
+	function fontChanger(id) { //element id
+		if (fontSpeedCounter == fontSpeed) {
+			fontSpeedCounter = 0;
+			fontCounter++;
+			if (fontCounter >= fontFamilies.length) {
+				fontCounter = 0;
+			}
+			document.getElementById(id).style.fontFamily = fontFamilies[fontCounter]; 
+		}
+		fontSpeedCounter++;
+	}
+	function constantRun() {
+		fontChanger("title");
+		requestAnimationFrame(constantRun);
+	}
+	constantRun();
+
 	writeText();
 
-
 </script>
+
+<div class="cannon">
+	<script src="CannonShooter/funnycannonShooter.js">
+	</script>
+</div>
