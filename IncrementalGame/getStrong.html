@@ -23,12 +23,15 @@
 			constructor() {
 				this.gameData = new GameData();
 				this.lastSecond = 0; //Remembers the last second
+				this.seconds = 5;
 			}
 			run (now) {
-				if (this.lastSecond == 0 | now-this.lastSecond >= 1*1000) {
+				drawAll();
+				if (this.lastSecond == 0 | now-this.lastSecond >= this.seconds*1000) {
 					coins.add();
 					this.lastSecond = now;
 				}
+				bucket.hitAnimation();
 				this.gameData.gold = coins.coinsRemoved;
 				this.applytoDOM();
 				window.requestAnimationFrame((now) => { //wrapper to access this.run() again
@@ -53,10 +56,9 @@
 		}
 
 		game1 = new Game();
-		bucket= new Bucket(cx.canvas.width*(1/3), cx.canvas.height*(1/2), cx.canvas.width*(2/5), cx.canvas.height/2);
-		coins = new Coins();
+		bucket= new Bucket(cx.canvas.width*(1/4), cx.canvas.height*(3/4), cx.canvas.width*(1/5), cx.canvas.height/2);
+		coins = new Coins(bucket.x, bucket.y);
 
-		drawAll();
 		window.requestAnimationFrame((now) => { 
 			game1.run(now);
 		});
