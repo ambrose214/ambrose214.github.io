@@ -15,6 +15,15 @@
 		<canvas id="bucketOfGold"> </canvas>
 	</body>
 
+	<div id ="buttonDecrease">
+		<button type="button" onclick="game1.changeSpeed(-0.1)">+</button> 
+	</div>
+	<div id="buttonIncrease"> 
+		<button type="button" onclick="game1.changeSpeed(0.1)">-</button> 
+	</div>
+
+
+
 
 	<script src= "bucketOfGold.js"> </script>
 	<script> 
@@ -23,7 +32,7 @@
 			constructor() {
 				this.gameData = new GameData();
 				this.lastSecond = 0; //Remembers the last second
-				this.seconds = 5;
+				this.seconds = 0.5;
 			}
 			run (now) {
 				drawAll();
@@ -43,6 +52,9 @@
 			}
 			applytoDOM() {
 				$("#GoldCounter").text(this.gameData.gold);
+			}
+			changeSpeed(x) { 
+				this.seconds += x;
 			}
 		}
 
