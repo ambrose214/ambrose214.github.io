@@ -6,8 +6,8 @@ body, html {
 	overflow: hidden;
 } 
 
-p {
-
+h1 {
+	text-align: : center;
 }
 canvas {
 	top: 0px;

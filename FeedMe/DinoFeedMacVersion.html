@@ -1,11 +1,6 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="DinoFeed.css">
+<link rel="stylesheet" href="DinoFeedMacVersion.css">
 <body>
-	<h1>
-	<a href="DinoFeedMacVersion.html">
-		CLICK HERE FOR MAC VERSION
-					</a>
-				</h1>
 	<div class="noselect">
 		<div id="foodSize">
 			<h3 > Size of Food(Use arrow keys to change size ): </h3>
@@ -15,17 +10,21 @@
 
 		<h5 id="counter"> Food wasted so far: 0 </h5>
 		<h5 id="eaten"> Food eaten so far: 0 </h5>
-
+		<div id="demo"> 
+		</div>
+		<canvas id="game"> </canvas>
 	</div> 
 </h1>
 </div>
+
 </body>
 
-<canvas> </canvas>
+
 
 <script> 
 
 	var cx = document.querySelector("canvas").getContext("2d");
+
 	cx.canvas.width=window.innerWidth;
 	cx.canvas.height=window.innerHeight;
 
@@ -128,7 +127,7 @@ class Monster extends Rectangle {
 	}
 	move () {
 		if ((this.posX <= 0 && dirAdd == -speed) ||
-			(this.posX >= cx.canvas.width && dirAdd == speed))  {
+			(this.posX >= cx.canvas.width-this.width && dirAdd == speed))  {
 			this.faceRight = !this.faceRight;
 		dirAdd = -dirAdd;
 	}
@@ -232,13 +231,26 @@ drawMonster() {
 }
 
 
+//Taken from Online
+function  getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect(), // abs. size of element
+      scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
+      scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
 
+  return {
+    x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+    y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+  }
+}
 
 var speed = 5;
 var dirAdd = speed; //initially moves right
 document.addEventListener('click', (e) => {
+	
+	
 	document.getElementById('counter').innerHTML = "Food wasted so far: "+ (rects.arr.length+1);
-	let newRect = new Rectangle(e.clientX, e.clientY-rectH,rectW,rectH);
+	var convertedPos = getMousePos(cx.canvas,e);
+	let newRect = new Rectangle(convertedPos.x,convertedPos.y,rectW,rectH);
 	console.log(e.clientX + " " + e.clientY);
 	console.log(newRect.collides(true));
 	if (!rects.collides(newRect,true)) {
@@ -283,6 +295,9 @@ function drawPreviewRect() {
 
 function draw() {
 	cx.clearRect(0,0, cx.canvas.width, cx.canvas.height);
+	/* cx.rect(0,0, cx.canvas.width, cx.canvas.height);
+	cx.strokeStyle="#FF0000"; */
+	cx.stroke();
 	monster1.drawMonster();
 	monster1.move();
 	if (monster1.breathe) {monster1.breatheFire();}
