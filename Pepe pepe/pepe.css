@@ -1,0 +1,10 @@
+* {
+	position: absolute;
+}
+
+img {
+	 position: absolute;
+    border: 1px solid red;
+    top: 70px;
+    right: 15px;
+}
