@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:a@localhost/pre-registration'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:a@localhost/pre-registration'
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
