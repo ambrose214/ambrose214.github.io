@@ -8,87 +8,97 @@
 </head>
 
 <body>
-	<div id="titleHeader"> 
-		<h1 id="title"> H O M E
+
+	<div id="link-header"> 
+
+		<div id="current-page"> 
+			H O M E
 			<hr></h1>
-			
 		</div>
-		
 
-
-		<br>
-
-		<div class = "panels">
-			<h2> P r o j e c t s </h2>
-			<hr>
+		<div class="tabs"> 
 			<ul>
-				<div class = "left-column">
-					<li>
-						<a href="FeedMe/DinoFeed.html">
-							<div class = "left link panel"> 
-								Dino Feed 
-							</div>
-						</a>
-					</li>
-					<li>	
-						<a href="FallingBlocksPlatformer/FallingBlocksPlatformer.html"> 
-							<div class = "left link panel"> 
-								Dino Be
-							</div>
-						</a>
-					</li>
-					
-				</div>
-				<div class = "right-column">
-					<li>	
-						<a href="IncrementalGame/getStrong.html"> 
-							<div class = "right link panel"> 
-								Collect Money
-							</div>
-						</a>
-					</li>
-					<li >
-						<a href="SquareBounce/mainCharv4.html">
-							<div class = "right link panel"> 
-								Bounce the Squares!
-							</div>
-						</a>
-					</li>
-					<li>
-						<a href="Game/game1Normal.html">
-							<div class = "right link panel"> 
-								SpikeDrops
-							</div>
-						</a>
-					</li>
-					<li>
-						<a href="ThomasDankEngine/index.html">
-							<div class = "right link panel"> 
-								Tom the Engine
-							</div>
-						</a>
-					</li>
-
-					<li>
-						<a href="ClickingGame/ClickerGame.html">
-							<div class = "right link panel"> 
-								Clicking Game
-							</div>
-						</a>
-					</li>
-				</div>
+				<li class="tab"> Home </li>
+				<li class="tab"> Projects! </li>
+				<li class="tab"> About me </li>
+				<li class="tab"> Fun </li>
+				<LI CLASS="tab"> Cool photos </li>
 			</ul>
-
 		</div>
 
-		<canvas id= width=height> 
+	</div>
 
-		</canvas>
+	<div class = "panels">
+		<h2> P r o j e c t s </h2>
+		<hr>
+		<ul>
+			<div class = "left-column">
+				<li>
+					<a href="FeedMe/DinoFeed.html">
+						<div class = "left link panel"> 
+							Dino Feed 
+						</div>
+					</a>
+				</li>
+				<li>	
+					<a href="FallingBlocksPlatformer/FallingBlocksPlatformer.html"> 
+						<div class = "left link panel"> 
+							Dino Be
+						</div>
+					</a>
+				</li>
 
-		<div>
-			<p id = "myDescription"> </p>
+			</div>
+			<div class = "right-column">
+				<li>	
+					<a href="IncrementalGame/getStrong.html"> 
+						<div class = "right link panel"> 
+							Collect Money
+						</div>
+					</a>
+				</li>
+				<li >
+					<a href="SquareBounce/mainCharv4.html">
+						<div class = "right link panel"> 
+							Bounce the Squares!
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="Game/game1Normal.html">
+						<div class = "right link panel"> 
+							SpikeDrops
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="ThomasDankEngine/index.html">
+						<div class = "right link panel"> 
+							Tom the Engine
+						</div>
+					</a>
+				</li>
 
-			<p> </p>
+				<li>
+					<a href="ClickingGame/ClickerGame.html">
+						<div class = "right link panel"> 
+							Clicking Game
+						</div>
+					</a>
+				</li>
+			</div>
+		</ul>
+
+	</div>
+
+	<canvas id= width=height> 
+
+	</canvas>
+
+	<div id="aboutMe">
+		<p id = "myDescription"> </p>
+
+		<p> </p>
 <!--
 		<label for="Answer">Do you want to play a game? </label>
 		<input type="text id="Answer" placeholder="">
@@ -133,7 +143,7 @@
 		fontSpeedCounter++;
 	}
 	function constantRun() {
-		fontChanger("title");
+		//fontChanger("title");
 		requestAnimationFrame(constantRun);
 	}
 	constantRun();

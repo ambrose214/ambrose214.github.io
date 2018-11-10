@@ -22,12 +22,30 @@ function httpGetAsync(theUrl, callback)
 
     // call send with no params as they were passed in on the url string
     xmlHttp.send(null);
-
+    completed_requests = true;
     return;
 }
 
+var numbgifs = 100; //per line
+var idName = "pepe";
+var gifIds = [];
+var gifVars = []; //necessary for x=document.createElement("IMG");
+var width = window.innerWidth/numbgifs;
+var height = window.innerHeight/numbgifs;
+var count=0;
+var globallmt = 50;
+
+var completed_requests = false;
+
+
+for (let i = 0; i < 250; i++) {
+    gifVars.push(0);
+    gifIds.push(0);
+}
+
+
 // callback for the top 8 GIFs of search
-function tenorCallback_search(responsetext,callback)
+function tenorCallback_search(responsetext)
 {
     // parse the json response
     var response_objects = JSON.parse(responsetext);
@@ -38,18 +56,18 @@ function tenorCallback_search(responsetext,callback)
 
     var parent = document.getElementById("gifsCompilation");
     console.log(count);
-    for (let i=0; i < lmt; i++) {
+    for (let i=globallmt*count; i < (globallmt*(1+count)); i++) {
         gifVars[i]=document.createElement("IMG");
-        /* console.log(idName + i);
+        console.log(idName + i);
         gifIds.push(idName + i);
-        gifVars[i].setAttribute("id",gifIds[i]); */
-        console.log(gifVars[i]);
+        gifVars[i].setAttribute("id",gifIds[i]);
         gifVars[i].setAttribute("src",top_50_gifs[i%50]["media"][0]["nanogif"]["url"]);
         gifVars[i].setAttribute("alt","");
-        gifVars[i].style.width="50px";
+        gifVars[i].style.width=width;
         gifVars[i].style.height=height;
         parent.appendChild(gifVars[i]);
     }
+
     return;
 
 }
@@ -63,11 +81,12 @@ function grab_data(anon_id)
     var lmt = 50;
 
     // test search term
-    
-
-    var search_term = pepeEmote[Math.floor(Math.random() * (pepeEmote.length-1))]+" frog pepe";
+    //var search_term = "pepe";
 
     // using default locale of en_US
+    let search_term = pepeEmote[count]+" frog pepe"; 
+    console.log(search_term);
+    count++;
     var search_url = "https://api.tenor.com/v1/search?tag=" + search_term + "&key=" +
     apikey + "&limit=" + lmt + "&anon_id=" + anon_id;
 
@@ -76,8 +95,6 @@ function grab_data(anon_id)
     // data will be loaded by each call's callback
     return;
 }
-
-
 
 
 // callback for anonymous id -- for first time users
@@ -94,47 +111,7 @@ function tenorCallback_anonid(responsetext)
     grab_data(anon_id);
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-async function startCycle() {
-    await sleep(3000);
-    console.log(count);
-    console.log(gifVars.length);
-    requestAnimationFrame(cycle);
 
-}
-
-var index = 0;
-var time = 0;
-function cycle() {
-    if (time%1 == 0) {
-        if (index == 0) {
-            temp = gifVars[0].getAttribute("src");
-        }
-        gifVars[index ].setAttribute("src", gifVars[index+1].getAttribute("src"));
-        index++;
-        if (index ==  gifVars.length-1) {
-            gifVars[index].setAttribute("src", temp);
-            index = 0;
-        }
-    }
-    time++;
-    requestAnimationFrame(cycle);
-}
-
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
-/*
-
-*/
 // SUPPORT FUNCTIONS ABOVE
 // MAIN BELOW
 
@@ -144,55 +121,53 @@ function shuffleArray(array) {
 // grab_data(anon_id);
 
 // else first time user
+
+
 var url = "https://api.tenor.com/v1/anonid?key=" + "HZEB51SQNPXL";
-var numbgifs = 50; //per line
-var idName = "pepe";
-var gifIds = [];
-var gifVars = []; //necessary for x=document.createElement("IMG");
-var width = document.innerWidth/numbgifs;
-var height = window.innerHeight/numbgifs;
-var count=0;
-var lmt = 50;
+
+// start the flow by getting a new anonymous id and having the callback pass it to grab_data
 var pepeEmote = ["sad", "angry", "happy", "surprised", "smug"];
 
+ httpGetAsync(url,tenorCallback_anonid);
+ var k = 1;
+while (completed_requests && k < pepeEmote.length) {
+     httpGetAsync(url,tenorCallback_anonid);
+    k++;
+}
 
-async function renderProperly() {
-    await sleep(3000);
+
+
+function cycle() {
+    demo();
+    console.log(gifIds[1]);
+    let temp = document.getElementById(gifIds[0]).getAttribute("src");
     for (let i = 0; i < gifVars.length; i++) {
-        gifVars[i].style.position="absolute";
-        shootPepe(gifVars[i]);
+        if (i ==  gifVars.length-1) {
+            gifVars[i].setAttribute("src", temp);
+            break;
+        }
+        gifVars[i].setAttribute("src", gifVars[i+1]);
     }
+    requestAnimationFrame(cycle);
 }
-var initial = 20;
-var myReq;
-var a;
-function shootPepe (pepe) {
-    if (pepe.style.left == "600px") {
-        cancelAnimationFrame(myReq);
-    }
-    pepe.style.left=initial+a+"px";
-    a++;
-    myReq = requestAnimationFrame(shootPepe);
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
-// start the flow by getting a new anonymous id and having the callback pass it to grab_data
-httpGetAsync(url,tenorCallback_anonid);
+async function demo() {
+    await sleep(2000);
+    console.log(count);
+    console.log(gifVars.length);
 
-startCycle();
-//renderProperly();
+}
+//
 
-document.addEventListener('keydown', (e) => {
-    let keyCode = e.keyCode;
-    if (keyCode == 32 ) {
-        httpGetAsync(url,tenorCallback_anonid);
-    }
-});
+
 </script>
 
 <body id="gifsCompilation">
-    <p1> m e m e s </p1>
 
 
 
 </body>
-
-</html> 
+</html>

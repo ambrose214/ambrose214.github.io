@@ -18,28 +18,54 @@ canvas {
 	z-index: -1;
 }
 
-
-
 h1 {
 	font-size: 5vw;
 	position:absolute;
-	text-align: center;
-	 right: 40vw;
+	text-align: left;
 }
 
-#titleHeader {
-	display: block;
-	position: sticky;
-	width: 100%;
+#link-header {
+	height: 80%;
+	position: fixed;
+}
+
+#current-page {
+	float:left;
+	display: inline-block;
+	font-size: 5vw;
 	height: 5vw;
 }
 
+
+.tabs {
+	margin-left: auto;
+    margin-right: auto;
+    width:7em;
+	position: relative;
+	text-transform: uppercase;
+	display:inline-block;
+	letter-spacing: 5px;
+}
+
+.tab {
+
+	margin-left: 1vw;
+	display: inline-block;
+	font-size: 2vw;
+}
+
+
 #myDescription {
-	width: 30%;
+	width: 70%;
 	font-size: 2vw;
 	background-color: black;
 	border:2px solid;
 	border-color: rgb(140, 115, 115); 
+}
+
+#aboutMe {
+	top:50%;
+	position:fixed;
 }
 
 h2 {
@@ -75,11 +101,15 @@ form {
 ul {
 	list-style: none;
 }
+
 .panels {
 	background-color: #212121;
+	position: absolute;
 	display: block;
 	text-align: center;
 	float:right;
+	top: 50%;
+	left:50%;
 	width: 50%;
 
 }
@@ -99,7 +129,8 @@ ul {
 	font-size: 2vw;
 	border-radius: 25px;
 	text-decoration: bold;
-	background-color:black;
+	opacity: 0.1;
+	background-color:#7C6C6C;
 	border:2px solid;
 	border-color: rgb(140, 115, 115); 
 	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);

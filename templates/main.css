@@ -1,0 +1,31 @@
+.panel {
+	/* letter-spacing: 3px; 
+	text-shadow: 3px 2px red;
+	font-size:10vw 
+	transition: background-color 2000ms;
+
+	display:inline-block;*/
+	
+	text-align: center;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+	font-size: 2vw;
+	border-radius: 25px;
+	text-decoration: bold;
+	opacity: 0.1;
+	background-color:#7C6C6C;
+	border:2px solid;
+	border-color: rgb(140, 115, 115); 
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
+	box-shadow:0 1px 1px rgba(0,0,0,.05);
+	color: black;
+
+	text-transform: uppercase;
+	position: relative;
+	line-height:10%;
+	padding: 1vw;
+	display: table;
+	width: 40%;
+	float:left;
+}

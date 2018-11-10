@@ -22,6 +22,26 @@
 		<button type="button" onclick="game1.changeSpeed(0.1)">-</button> 
 	</div>
 
+	<div id="Shop"> 
+		<h2> Mr. Shopekeeper </h2>
+		<h4> 
+			<ul>
+			<li>
+			<button type="button" onclick=""> Sword </button>
+			</li>
+			<li>
+			<button type="button" onclick=""> Shield</button>
+			</li>
+			<li>
+			<button type="button" onclick=""> Mystery box</button>
+			</li>
+
+			</ul>
+
+
+		</h4>
+	</div>
+
 
 
 
@@ -51,7 +71,8 @@
 				this.gameData.increaseGold(1);
 			}
 			applytoDOM() {
-				$("#GoldCounter").text(this.gameData.gold);
+				// document.getElementById("GoldCounter").innerHTML =this.gameData.gold;
+				//$("#GoldCounter").text(this.gameData.gold);
 			}
 			changeSpeed(x) { 
 				this.seconds += x;

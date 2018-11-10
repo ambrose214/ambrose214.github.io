@@ -146,5 +146,54 @@ function drawAll() {
 	coins.update();
 }
 
+//uhh incorporate this later
+class Game { //Overaching object storing the game
+			constructor() {
+				this.gameData = new GameData();
+				this.lastSecond = 0; //Remembers the last second
+				this.seconds = 0.5;
+			}
+			run (now) {
+				drawAll();
+				if (this.lastSecond == 0 | now-this.lastSecond >= this.seconds*1000) {
+					coins.add();
+					this.lastSecond = now;
+				}
+				bucket.hitAnimation();
+				this.gameData.gold = coins.coinsRemoved;
+				this.applytoDOM();
+				window.requestAnimationFrame((now) => { //wrapper to access this.run() again
+					this.run(now);
+				});
+			}
+			update () { 
+				this.gameData.increaseGold(1);
+			}
+			applytoDOM() {
+				 //document.getElementById("GoldCounter").innerHTML =this.gameData.gold;
+				//$("#GoldCounter").text(this.gameData.gold);
+			}
+			changeSpeed(x) { 
+				this.seconds += x;
+			}
+		}
+
+		class GameData {
+			constructor () {
+				this.gold = 0;
+			}
+			increaseGold(x) { //increase by x amount
+				this.gold += x;
+			}
+		}
+
+		game1 = new Game();
+		bucket= new Bucket(cx.canvas.width*(1/4), cx.canvas.height*(3/4), cx.canvas.width*(1/5), cx.canvas.height/2);
+		coins = new Coins(bucket.x, bucket.y);
+
+		window.requestAnimationFrame((now) => { 
+			game1.run(now);
+		});
+
 
 

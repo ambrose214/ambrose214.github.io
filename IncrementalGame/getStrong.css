@@ -18,6 +18,32 @@ h3 {
 button:hover {
 	background-color: gold;
 }
+ul {
+	list-style: none;
+}
+
+button {
+	background-color: grey;
+}
+
+#Shop {
+	border-style: solid;
+	border-color: white;
+	border-width: 1px;
+	color:white;
+	position: absolute;
+	top: 10vw;
+	left: 50%;
+	width: 49%;
+	height: 49%;
+}
+
+#Shop > ul > li {
+	border-style: solid;
+	border-color: white;
+	border-width: 1px;
+	padding-top: 20px;
+}
 
 #bucketOfGold {
 	position: absolute;
