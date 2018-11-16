@@ -13,6 +13,7 @@ except ImportError:
 import json
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:a@localhost/pre-registration'
 heroku = Heroku(app)
 db = SQLAlchemy(app)
@@ -52,7 +53,7 @@ def index():
     names=get_jsonparsed_data(url)
     #names=["bruh","john", "ambrose"]
 
-    return render_template('index.html', savedNames=names['values'])
+    return render_template('index.html')
 
 # Save e-mail to database and send to success page
 @app.route('/prereg', methods=['POST'])
@@ -66,7 +67,7 @@ def prereg():
             reg = User(name)
             db.session.add(reg)
             db.session.commit()
-            return render_template('index.html', savedNames=names)
+            return render_template('index.html', savedNames=names['values'])
            # return render_template('success.html')
     return render_template('index.html', savedNames=names['values'])
 
