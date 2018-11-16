@@ -50,6 +50,9 @@
     }
     .row.content {height:auto;} 
   }
+  .names {
+    position: relative;
+  }
 </style>
 </head>
 <body>
@@ -86,6 +89,9 @@
                   </div>
                   <button type="submit" class="btn btn-default">Submit</button>
                 </form> 
+                {% for name in savedNames %}
+                <div class="names"> {{name[1]}} </div>
+                {% endfor %}
               </div>
               <div class="col-sm-2 sidenav">
                 <canvas id="bucketOfGold"> </canvas>

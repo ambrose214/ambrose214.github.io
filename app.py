@@ -3,10 +3,36 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_heroku import Heroku
 
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+
+import json
+
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:a@localhost/pre-registration'
 heroku = Heroku(app)
 db = SQLAlchemy(app)
+url=("https://dataclips.heroku.com/xycrpswqvwfvniznpazsdvjdmvkl-Names.json")
+
+def get_jsonparsed_data(url):
+    """
+    Receive the content of ``url``, parse it as JSON and return the object.
+
+    Parameters
+    ----------
+    url : str
+
+    Returns
+    -------
+    dict
+    """
+    response = urlopen(url)
+    data = response.read()#.decode("utf-8")
+    return json.loads(data)
 
 # Create our database model
 class User(db.Model):
@@ -23,12 +49,16 @@ class User(db.Model):
 # Set "homepage" to index.html
 @app.route('/')
 def index():
-    return render_template('index.html')
+    names=get_jsonparsed_data(url)
+    #names=["bruh","john", "ambrose"]
+
+    return render_template('index.html', savedNames=names['values'])
 
 # Save e-mail to database and send to success page
 @app.route('/prereg', methods=['POST'])
 def prereg():
     name = None
+    names=get_jsonparsed_data(url)
     if request.method == 'POST':
         name = request.form['name']
         # Check that email does not already exist (not a great query, but works)
@@ -36,9 +66,11 @@ def prereg():
             reg = User(name)
             db.session.add(reg)
             db.session.commit()
+            return render_template('index.html', savedNames=names)
            # return render_template('success.html')
-    return render_template('index.html')
+    return render_template('index.html', savedNames=names['values'])
 
 if __name__ == '__main__':
     app.debug = True
     app.run()
+
