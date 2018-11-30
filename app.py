@@ -48,16 +48,8 @@ class User(db.Model):
         return '<Name %r>' % self.name
 
 # Set "homepage" to index.html
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    names=get_jsonparsed_data(url)
-    #names=["bruh","john", "ambrose"]
-
-    return render_template('index.html')
-
-# Save e-mail to database and send to success page
-@app.route('/prereg', methods=['POST'])
-def prereg():
     name = None
     names=get_jsonparsed_data(url)
     if request.method == 'POST':
@@ -70,6 +62,8 @@ def prereg():
             return render_template('index.html', savedNames=names['values'])
            # return render_template('success.html')
     return render_template('index.html', savedNames=names['values'])
+
+
 
 if __name__ == '__main__':
     app.debug = True
