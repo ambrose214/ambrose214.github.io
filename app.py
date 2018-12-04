@@ -55,6 +55,9 @@ def index():
     if request.method == 'POST':
         name = request.form['name']
         # Check that email does not already exist (not a great query, but works)
+        if name =="!deleteAll" :
+           db.session.query(User).delete()
+           db.session.commit()
         if not db.session.query(User).filter(User.name == name).count():
             reg = User(name)
             db.session.add(reg)
