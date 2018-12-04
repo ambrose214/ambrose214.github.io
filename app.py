@@ -58,6 +58,7 @@ def index():
         if name =="!deleteAll" :
            db.session.query(User).delete()
            db.session.commit()
+           return render_template('index.html', savedNames=names['values'])
         if not db.session.query(User).filter(User.name == name).count():
             reg = User(name)
             db.session.add(reg)
