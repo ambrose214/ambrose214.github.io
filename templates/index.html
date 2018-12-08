@@ -29,6 +29,7 @@
     height: 100%;
     height: auto;
     overflow: hidden;
+    display: flex;
   }
 
   /* Set black background color, white text and some padding */
@@ -70,7 +71,11 @@
           <h3>HOME</h3>
           <div class="container-fluid text-center">    
             <div class="row content">
-
+              <div class="col-sm-2 sidenav">
+                <p><a href="#">Link</a></p>
+                <p><a href="#">Link</a></p>
+                <p><a href="#">Link</a></p>
+              </div>
               <div class="col-sm-8 text-left"> 
                 <h1>Welcome</h1>
                 <p>This is a website built with bootstrap using free templates weschools. Its goals are to use css/js to make it look cooler and then use python/angular.js to add backend stuff so we can save it onto the server.</p>
@@ -93,7 +98,10 @@
                 </div>
 
               </div>
-                <canvas id="bucketOfGold" width="500" height=> </canvas>
+
+              <div class="col-sm-2 sidenav">
+                <canvas id="bucketOfGold"> </canvas>
+              </div>
             </div>
           </div>
         </div>
@@ -168,9 +176,10 @@
       <div class="container-fluid text-center">    
         <div class="row content">
           <div class="col-sm-2 sidenav">
-            <p><a href="https://github.com/ambrose214/ambrose214.github.io">Github</a></p>
-            <p><a href="https://www.linkedin.com/in/ambrose-kuo-832147113/">Linkedin</a></p>
-            <img src="../static/images/Profile/Me.jpg" height='300' width="200">
+            <h2> Professional links</h2>
+            <p><a href="#">Github</a></p>
+            <p><a href="#"></a></p>
+            <p><a href="#">Link</a></p>
           </div>
           <div class="col-sm-4 text-left"> 
 
@@ -184,11 +193,19 @@
               </li>
               <li>
                 <blockquote>
-                  <p> "I think its hilarious u kids talking bad about Ambrose. u wouldnt say this shit to him at lan, hes jacked. not only that but he wears the freshest clothes, eats at the chillest restaurants and hangs out with the hottest dudes. yall are pathetic" </p>
+                  <p> "I think its hilarious u kids talking shit about Ambrose. u wouldnt say this shit to him at lan, hes jacked. not only that but he wears the freshest clothes, eats at the chillest restaurants and hangs out with the hottest dudes. yall are pathetic" </p>
                   <footer> best friend </footer>
                 </blockquote>
               </li>
             </ul>
+          </div>
+          <div class="col-sm-2 sidenav">
+            <div class="well">
+              <p>ADS</p>
+            </div>
+            <div class="well">
+              <p>ADS</p>
+            </div>
           </div>
         </div>
       </div>
@@ -264,7 +281,7 @@
       <h3>Finding Gifs</h3>
       <ul>
         <li>
-          <a href="../static/Projects/Pepepepe/pepepepe.html">
+          <a href="../static/Projects/pepepepe/pepepepe.html">
             <div class = "right link panel"> 
               Pepes
             </div>

@@ -63,9 +63,7 @@ function grab_data(anon_id)
     var lmt = 50;
 
     // test search term
-    
-
-    var search_term = pepeEmote[Math.floor(Math.random() * (pepeEmote.length-1))]+" frog pepe";
+    var search_term = "frog pepe";
 
     // using default locale of en_US
     var search_url = "https://api.tenor.com/v1/search?tag=" + search_term + "&key=" +
@@ -153,7 +151,6 @@ var width = document.innerWidth/numbgifs;
 var height = window.innerHeight/numbgifs;
 var count=0;
 var lmt = 50;
-var pepeEmote = ["sad", "angry", "happy", "surprised", "smug"];
 
 
 async function renderProperly() {
@@ -178,7 +175,7 @@ function shootPepe (pepe) {
 httpGetAsync(url,tenorCallback_anonid);
 
 startCycle();
-//renderProperly();
+renderProperly();
 
 document.addEventListener('keydown', (e) => {
     let keyCode = e.keyCode;

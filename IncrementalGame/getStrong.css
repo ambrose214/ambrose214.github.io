@@ -1,0 +1,59 @@
+body, html {
+
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+} 
+
+body {
+	background-color: black;
+}
+
+h3 {
+	color: gold;
+}
+
+button:hover {
+	background-color: gold;
+}
+ul {
+	list-style: none;
+}
+
+button {
+	background-color: grey;
+}
+
+#Shop {
+	border-style: solid;
+	border-color: white;
+	border-width: 1px;
+	color:white;
+	position: absolute;
+	top: 10vw;
+	left: 50%;
+	width: 49%;
+	height: 49%;
+}
+
+#Shop > ul > li {
+	border-style: solid;
+	border-color: white;
+	border-width: 1px;
+	padding-top: 20px;
+}
+
+#bucketOfGold {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;	
+}
+
+#GoldCounter {
+	display:inline-block;
+}
